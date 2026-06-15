@@ -3,11 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terracaster コントローラー</title>
+    <title>TerraCaster コントローラー - Space Edition</title>
     <style>
+        /* 宇宙空間を表現するグラデーションとアニメーション */
+        @keyframes starry-sky {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
         body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: #f4f6f9;
+            font-family: 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+            /* 深い宇宙をイメージしたグラデーションと微細なグリッドパターン */
+            background: 
+                radial-gradient(circle at center, #1a1e3a 0%, #0d1120 100%),
+                repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 2px),
+                repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 2px);
+            background-size: 200% 200%, 20px 20px, 20px 20px;
+            animation: starry-sky 30s ease infinite;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -16,68 +29,118 @@
             margin: 0;
             padding: 20px;
             box-sizing: border-box;
+            color: #ecf0f1;
         }
+        
+        /* 宇宙ステーションのモニターのようなタイトル */
         h1 {
-            color: #333;
-            font-size: 1.5rem;
-            margin-bottom: 30px;
+            color: #00d2ff; /* 鮮やかなネオンブルー */
+            font-size: 1.6rem;
+            margin-bottom: 35px;
             text-align: center;
+            font-weight: 300; /* 細身のフォントで未来感を */
+            letter-spacing: 0.1rem;
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.7); /* グロー効果 */
+            border-bottom: 1px solid rgba(0, 210, 255, 0.3);
+            padding-bottom: 15px;
+            width: 100%;
+            max-width: 480px;
         }
-        .btn {
+        
+        .btn-container {
             width: 100%;
             max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .btn {
+            width: 100%;
             padding: 25px 20px;
             font-size: 1.2rem;
             font-weight: bold;
             border: none;
             border-radius: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.1s, background-color 0.2s;
+            transition: all 0.2s ease-in-out;
             -webkit-tap-highlight-color: transparent;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-sizing: border-box;
+            letter-spacing: 0.05rem;
         }
+        
+        /* ボタンの光の反射（擬似要素） */
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(35deg);
+            pointer-events: none;
+        }
+
         .btn:active {
-            transform: scale(0.98);
-            box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+            transform: translateY(2px);
+            box-shadow: 0 0 5px rgba(0, 210, 255, 0.5);
         }
-        /* 通常連動ボタン（緑） */
+        
+        /* 1. 通常テイクボタン（緑） - 銀河の端の輝きをイメージ */
         .btn-trigger {
-            background-color: #2ecc71;
-            color: white;
+            background-color: #1abc9c;
+            color: #ecf0f1;
+            box-shadow: 0 5px 15px rgba(26, 188, 156, 0.4);
         }
         .btn-trigger:active {
-            background-color: #27ae60;
+            background-color: #16a085;
         }
-        /* 強制戻しボタン（赤） */
+        
+        /* 2. 強制戻しボタン（赤） - ブラックホールの特異点をイメージ */
         .btn-force {
-            background-color: #e74c3c;
-            color: white;
+            background-color: #c0392b;
+            color: #fcece3;
+            box-shadow: 0 5px 15px rgba(192, 57, 43, 0.5);
+            /* より強い警告感を出すために少し光らせる */
+            box-shadow: 0 0 10px rgba(192, 57, 43, 0.7);
         }
         .btn-force:active {
-            background-color: #c0392b;
+            background-color: #96281b;
         }
+        
         /* 送信中ステータス表示 */
         #status {
-            margin-top: 10px;
-            font-size: 1rem;
-            color: #7f8c8d;
-            height: 24px;
+            margin-top: 15px;
+            font-size: 1.1rem;
+            height: 28px;
             font-weight: bold;
+            letter-spacing: 0.1rem;
+            text-align: center;
+            width: 100%;
         }
     </style>
 </head>
 <body>
 
-    <h1>テイクコントロールパネル</h1>
+    <h1>ロビーLEDビジョン<br>TerraCasterテイクコントロールパネル</h1>
 
-    <button class="btn btn-trigger" onclick="sendSignal('terracaster_trigger', '通常連動を送信しました')">
-        TerraCasterテイクボタン<br>（3分後に自動的に戻る）
-    </button>
+    <div class="btn-container">
+        <button class="btn btn-trigger" onclick="sendSignal('terracaster_trigger', '➔ GALACTIC SIGNALD SENT.')">
+            TerraCasterテイクボタン<br>（3分後に自動的に戻る）
+        </button>
 
-    <button class="btn btn-force" onclick="sendSignal('force_normal_trigger', '⚠️ 強制戻しを送信しました')">
-        強制戻しテイクボタン
-    </button>
+        <button class="btn btn-force" onclick="sendSignal('force_normal_trigger', '⚠️ FORCE RETURN INITIATED.')">
+            通常に戻す
+        </button>
+    </div>
 
     <div id="status"></div>
 
@@ -87,10 +150,9 @@
 
         function sendSignal(message, successText) {
             const statusDiv = document.getElementById('status');
-            statusDiv.innerText = "送信中...";
-            statusDiv.style.color = "#7f8c8d";
+            statusDiv.innerText = "TRANSMITTING..."; /* 送信中 */
+            statusDiv.style.color = "#aaaaaa"; /* デフォルトは少し暗く */
 
-            // ブラウザのセキュリティに引っかからない方法（POST）でntfyに信号を送信
             fetch(`https://ntfy.sh/${TOPIC}`, {
                 method: 'POST',
                 body: message
@@ -98,18 +160,29 @@
             .then(response => {
                 if (response.ok) {
                     statusDiv.innerText = successText;
-                    statusDiv.style.color = message === 'force_normal_trigger' ? '#e74c3c' : '#2ecc71';
+                    /* 送信成功時にボタンと同じ色のネオンカラーにする */
+                    statusDiv.style.color = message === 'force_normal_trigger' ? '#e74c3c' : '#1abc9c';
+                    /* 文字にグロー効果を足す */
+                    statusDiv.style.textShadow = message === 'force_normal_trigger' ? '0 0 10px rgba(231, 76, 60, 0.7)' : '0 0 10px rgba(26, 188, 156, 0.7)';
                 } else {
-                    statusDiv.innerText = "エラー：送信失敗しました";
-                    statusDiv.style.color = "#e74c3c";
+                    statusDiv.innerText = "ERROR: TRANSMISSION FAILED."; /* 送信失敗 */
+                    statusDiv.style.color = "#c0392b";
+                    statusDiv.style.textShadow = '0 0 10px rgba(192, 57, 43, 0.7)';
                 }
                 // 3秒後に文字を消す
-                setTimeout(() => { statusDiv.innerText = ""; }, 3000);
+                setTimeout(() => { 
+                    statusDiv.innerText = ""; 
+                    statusDiv.style.textShadow = "none";
+                }, 3000);
             })
             .catch(error => {
-                statusDiv.innerText = "通信エラーが発生しました";
-                statusDiv.style.color = "#e74c3c";
-                setTimeout(() => { statusDiv.innerText = ""; }, 3000);
+                statusDiv.innerText = "NETWORK ERROR: FAILED TO CONNECT."; /* 通信エラー */
+                statusDiv.style.color = "#c0392b";
+                statusDiv.style.textShadow = '0 0 10px rgba(192, 57, 43, 0.7)';
+                setTimeout(() => { 
+                    statusDiv.innerText = ""; 
+                    statusDiv.style.textShadow = "none";
+                }, 3000);
             });
         }
     </script>
